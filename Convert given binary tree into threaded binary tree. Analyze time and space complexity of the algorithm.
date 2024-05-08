@@ -1,0 +1,70 @@
+// Convert given binary tree into threaded binary tree.
+Analyze time and space complexity of the algorithm.
+
+#include<iostream>
+using namespace std;
+struct node
+{
+int key;
+node *left,*right;
+bool isthreaded;
+};
+node *createthreaded(node *root)
+{
+if(root==NULL)
+return NULL;
+if(root->left==NULL&&root->right==NULL)
+return root;
+if(root->left!=NULL)
+{
+node *l=createthreaded(root->left);
+l->right=root;
+l->isthreaded=true;
+cout << l->key << " Threaded " << " to " << root->key << endl;
+}
+if(root->right==NULL)
+return root;
+return createthreaded(root->right);
+}
+node *leftmost(node *root)
+{
+while (root!=NULL&&root->left!=NULL)
+root=root->left;
+return root;
+}
+void inorder(node *root)
+{
+if(root==NULL)
+return;
+node *cur=leftmost(root);
+while(cur!=NULL)
+{
+cout<<cur->key<<" ";
+if(cur->isthreaded)
+cur=cur->right;
+else
+cur=leftmost(cur->right);
+}
+}
+node *newnode(int key)
+{
+node *temp=new node;
+temp->left=temp->right=NULL;
+temp->key=key;
+return temp;
+}
+int main()
+{
+node *root= newnode(1);
+root->left=newnode(2);
+root->right=newnode(3);
+root->left->left=newnode(4);
+root->left->right=newnode(5);
+root->right->left=newnode(6);
+root->right->right=newnode(7);
+createthreaded(root);
+cout<<"Inorder traversal of created treee is \n";
+inorder(root);
+cout<<"\n";
+return 0;
+}
