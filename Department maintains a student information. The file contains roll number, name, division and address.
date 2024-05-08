@@ -1,0 +1,97 @@
+// Department maintains a student information. The file
+contains roll number, name, division and address. Allow user to add, delete
+information of student. Display information of particular employee. If record
+of student does not exist an appropriate message is displayed. If it is, then the
+system displays the student details. Use sequential file to main the data.
+
+#include<iostream> #include<fstream> #include<string.h> using namespace
+std; class student
+{
+typedef struct stud
+{
+int roll;
+char name[10]; char div;
+char add[10];
+}stud; stud rec; public:
+void create(); void display(); int search(); void Delete();
+};
+void student::create()
+{
+char ans; ofstream fout;
+fout.open("stud.txt",ios::out|ios::binary); do
+{
+cout<<"\n\t Enter roll no. of student:";
+cin>>rec.roll;
+cout<<"\n\t Enter name of student:"; cin>>rec.name;
+cout<<"\n\t Enter division of student:"; cin>>rec.div;
+cout<<"\n\t Enter address of student:"; cin>>rec.add;
+fout.write((char*)&rec,sizeof(stud))<<flush; cout<<"\n\t Do you want to add
+more record : "; cin>>ans;
+}
+while(ans=='y'||ans=='Y'); fout.close();
+}
+void student::display()
+{
+ifstream fin; fin.open("stud.txt",ios::in|ios::binary); fin.seekg(0,ios::beg);
+cout<<"\n\t The comment of file are :\n"; cout<<"\n\tRoll
+no.\tName\tDiv\tAddress"; while(fin.read((char*)&rec,sizeof(stud)))
+{
+if(rec.roll!=-1)
+cout<<"\n\t"<<rec.roll<<"\t\t"<<rec.name<<"\t"<<rec.div<<"\t"<<rec.add;
+}
+fin.close();
+}
+int student::search()
+{
+int r,i=0; ifstream fin;
+fin.open("stud.txt",ios::in|ios::binary); fin.seekg(0,ios::beg);
+cout<<"\n\t Enter a Roll no: "; cin>>r;
+while(fin.read((char*)&rec,sizeof(stud)))
+{
+if(rec.roll==r)
+{
+cout<<"\n\tRecord found \n";
+cout<<"\n\tRoll\tName\tDiv\tAddress";
+cout<<"\n\t"<<rec.roll<<"\t"<<rec.name<<"\t"<<rec.div<<"\t"<<rec.add; return
+i;
+} i++;
+}
+fin.close(); return 0;
+}
+void student::Delete()
+{
+int pos; pos=search(); fstream f;
+f.open("stud.txt",ios::in|ios::binary); f.seekg(pos,ios::beg);
+if(pos==0)
+{
+cout<<"Record not found "; return;
+}
+int offset =pos* sizeof(stud); f.seekp(offset);
+rec.roll=-1; strcpy(rec.name,"NULL"); rec.div = 'N'; strcpy(rec.add,"NULL");
+f.write((char*)&rec,sizeof(stud)); f.seekg(0);
+f.close();
+cout<<"\n\tRecord Deleted";
+}
+int main()
+{
+student obj; int ch,key; char ans; do
+{
+cout<<"\n\t***Student Information***";
+cout<<"\n\t1.Create\n\t2.Dispaly\n\t3.Delete\n\t4.Search\n\t5.Exit";
+cout<<"\n\tEnter Your Choice : ";
+cin>>ch;
+switch(ch)
+{
+case 1:obj.create(); break;
+case 2:obj.display(); break;
+case 3:obj.Delete(); break;
+case 4:key =obj.search(); if(key==0)
+cout<<"\n\tRecord not found...\n"; break;
+case 5:
+exit(0);
+break;
+}
+cout<<"\n\t ...Do You Want to Continue in main menu :"; cin>>ans;
+}while(ans=='y'||ans=='Y');
+return 1;
+}
