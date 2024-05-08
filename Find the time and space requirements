@@ -1,0 +1,84 @@
+//A book consists of chapters, chapters consist of sections
+and sections consist of subsections. Construct a tree and print the nodes. Find
+the time and space requirements of your method.
+
+
+#include<cstring>
+#include<iostream>
+using namespace std;
+struct node
+{
+char label[10]; int ch_count;
+struct node *child[10];
+}*root;
+class gt
+{
+public:
+void create();
+void display(node *r1); gt()
+{
+root=NULL;
+}
+};
+void gt::create()
+{
+int tbooks,tchapters,i,j,k;
+root=new node;
+cout<<"enter name of book "<<endl;
+cin>>root->label;
+cout<<"enter no. of chapters in book :";
+cin>>tchapters;
+root->ch_count=tchapters;
+for(i=0;i<tchapters;i++)
+{
+root->child[i]=new node; cout<<"enter chapter name "; cin>>root->child[i]-
+>label;
+cout<<"enter no.of section in chapters "<<root->child[i]->label<<":";
+cin>>root->child[i]->ch_count;
+for(j=0;j<root->child[i]->ch_count;j++)
+root->child[i]->child[j]=new node; cout<<"enter section"<<j+1<<"name\n";
+cin>>root->child[i]->child[j]->label;
+cout<<"enter no.of subsectiions "<<root->child[i]->child[j]->label<<" ";
+cin>>root->child[i]->child[j]->ch_count;
+for(k=0;k<root->child[i]->child[j]->ch_count;k++)
+{
+root->child[i]->child[j]->child[k]=new node; cout<<"enter subsections
+"<<k+1<<"name\n"; cin>>root->child[i]->child[j]->child[k]->label;
+}
+}
+}
+}
+void gt::display(node *r1)
+{
+int i,j,k,chapters; if(r1!=NULL)
+{
+cout<<"***BOOK HIERARCHY***"<<endl; chapters=r1->ch_count;
+//cout<<"\nChapters"<<endl; for(i=0;i<chapters;i++)
+{
+cout<<"\nChapter "<<i+1<<endl; cout<<" "<<r1->child[i]->label;
+cout<<"\nSections"<<endl;
+for(j=0;j<r1->child[i]->ch_count;j++)
+{
+cout<<" "<<r1->child[i]->child[j]->label; cout<<"\nSub-sections"<<endl;
+for(k=0;k<r1->child[i]->child[j]->ch_count;k++)
+{
+cout<<"\n"<<r1->child[i]->child[j]->child[k]->label;
+}
+}
+}
+}
+}
+int main()
+{
+int choice; gt g1; while(1)
+cout<<"Book tree creation\n1.create\n2.display\n3.quit\nenter your choice
+"<<endl; cin>>choice;
+switch(choice)
+{
+case 1: g1.create(); break;
+case 2: g1.display(root); break;
+case 3: exit(1);
+}
+}
+return 0;
+}
