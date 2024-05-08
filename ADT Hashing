@@ -1,0 +1,101 @@
+//Implement all the functions of a dictionary (ADT) using
+hashing and handle collisions using chaining with / without replacement.
+Data: Set of (key, value) pairs, Keys are mapped to values, Keys must be
+comparable, Keys must be unique. Standard Operations: Insert(key, value),
+Find(key), Delete(key)
+
+#include<iostream>
+#include<cstring>
+# define hash(x) x%10 using namespace std; 
+struct node
+{
+int mob; int chain;
+char name[100];
+};
+class hashtable
+{
+public:
+node data[10];
+int i;
+void init()
+{
+for(i=0;i<10;i++)
+{
+data[i].mob=-1; data[i].chain=-1; strcpy(data[i].name,"-1");
+}
+}
+void display()
+{
+cout<<"\nloc\tmob\tname\tchain\n"; for(i=0;i<10;i++)
+{
+cout<<"\n"<<i<<"\t"<<data[i].mob<<"\t"<<data[i].name<<"\t"<<data[i].chain;
+}
+cout<<endl;
+}
+int isfull()
+{
+for(i=0;i<10;i++)
+{
+if((data[i].mob)==-1) return 0;
+}
+return -1;
+}
+void insert()
+{
+node s;
+int loc,pred; if(isfull())
+{
+cout<<"hash table is full"<<endl;
+}
+cout<<"\nenter mobileno and the name :"; cin>>s.mob>>s.name;
+s.chain=-1; loc=hash(s.mob);
+if(data[loc].mob==-1)
+{
+data[loc]=s;
+}
+else
+{
+if(loc==hash(data[loc].mob))
+{
+while(data[loc].chain!=-1) loc=data[loc].chain;
+pred=loc; while(data[loc].mob!=-1) loc=(loc+1)%10; data[loc]=s;
+data[pred].chain=loc;
+}
+else
+{
+while(data[loc].mob!=-1) loc=(loc+1)%10; data[loc]=s;
+}
+}
+}
+void search(int key)
+{
+int loc=hash(key);
+while(loc!=-1 && data[loc].mob!=key)
+{
+loc=data[loc].chain;
+}
+if(loc!=-1)
+{
+cout<<"mobile no found: "<<loc<<endl; cout<<"mobile no: "<<data[loc].mob;
+cout<<"\nname: "<<data[loc].name<<endl;
+}
+else
+{
+cout<<"mobile no not found"<<endl;
+}
+}
+};
+int main(){ int ch; hashtable h; h.init();
+while(1){ cout<<"1.insert\n2.search\n3.display\n"; cin>>ch;
+switch(ch)
+{
+case 1: h.insert(); break; case 2:
+int key;
+cout<<"enter the key "; cin>>key; h.search(key);
+break; case 3:
+h.display(); break;
+case 4: exit(0);
+}
+}
+return 0;
+}
